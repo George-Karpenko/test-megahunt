@@ -23,30 +23,30 @@ class HistoryService
 
     public function show()
     {
-        return $this->foo(ActionEnum::View);
+        return $this->dbAction(ActionEnum::View);
     }
 
     public function update($requestAll)
     {
-        return $this->foo(ActionEnum::Edit, 'update', $requestAll);
+        return $this->dbAction(ActionEnum::Edit, 'update', $requestAll);
     }
 
     public function restore()
     {
-        $this->foo(ActionEnum::Restore, 'restore');
+        $this->dbAction(ActionEnum::Restore, 'restore');
     }
 
     public function destroy()
     {
-        $this->foo(ActionEnum::Delete, 'delete');
+        $this->dbAction(ActionEnum::Delete, 'delete');
     }
 
     public function hardDestroy()
     {
-        $this->foo(ActionEnum::HardDelete, 'forceDelete');
+        $this->dbAction(ActionEnum::HardDelete, 'forceDelete');
     }
 
-    private function foo($actionEnum, $cb = null, $requestAll = null)
+    private function dbAction($actionEnum, $cb = null, $requestAll = null)
     {
         $this->history->action = $actionEnum;
         DB::transaction(function () use ($cb, $requestAll) {

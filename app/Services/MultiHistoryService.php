@@ -4,19 +4,18 @@ namespace App\Services;
 
 use App\Enums\History\ActionEnum;
 use App\Models\History;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class MultiHistoryService
 {
     private array $histories = [];
-    private $nModels;
+    private $selectStatement;
 
     public function __construct(array $ids, $model)
     {
-        $this->nModels = $model::withTrashed()->whereIn('id', $ids);
-        $models = $this->nModels->get();
+        $this->selectStatement = $model::withTrashed()->whereIn('id', $ids);
+        $models = $this->selectStatement->get();
         foreach ($models as $model) {
             $history = [];
             $history['id'] = Str::uuid();
@@ -30,26 +29,26 @@ class MultiHistoryService
 
     public function multiRestore()
     {
-        $this->multiTach(ActionEnum::Restore, 'restore');
+        $this->dbAction(ActionEnum::Restore, 'restore');
     }
 
     public function multiDestroy()
     {
-        $this->multiTach(ActionEnum::Delete, 'delete');
+        $this->dbAction(ActionEnum::Delete, 'delete');
     }
 
     public function multiHardDestroy()
     {
-        $this->multiTach(ActionEnum::HardDelete, 'forceDelete');
+        $this->dbAction(ActionEnum::HardDelete, 'forceDelete');
     }
 
-    private function multiTach($actionEnum, $cd)
+    private function dbAction($actionEnum, $cd)
     {
         for ($i = 0; $i < count($this->histories); $i++) {
             $this->histories[$i]['action'] = $actionEnum;
         }
         DB::transaction(function () use ($cd) {
-            $this->nModels->$cd();
+            $this->selectStatement->$cd();
             History::insert($this->histories);
         });
     }
