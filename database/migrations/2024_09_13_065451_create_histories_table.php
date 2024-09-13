@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('model_id');
             $table->string('model_name', length: 250);
+            $table->index(["model_name", "model_id"]);
             $table->json('before');
             $table->json('after');
             $table->enum('action', array_column(ActionEnum::cases(), 'value'));
