@@ -1,0 +1,98 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Your super  ApplicationAPI",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/": {},
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Register",
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "properties": {
+                                            "last_name": {
+                                                "type": "string",
+                                                "example": "Last name"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Name"
+                                            },
+                                            "middle_name": {
+                                                "type": "string",
+                                                "example": "Middle name"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "email"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "Password"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+79500130189"
+                                            },
+                                            "device_name": {
+                                                "type": "string",
+                                                "example": "Device name"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Register",
+            "description": "Register"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
